@@ -1,13 +1,15 @@
-import numpy as np
-
 # Simple dataset_1 reader.
 # Variable Dataset contains tuples (o, p), where o is a genome sequence and p
-# is sequence of characters 'i'/'e' representing intron/extron
+# is sequence of characters 'i'/'e' representing intron/exon
 
+import os
 
 Dataset = []
 
-with open("dataset_1.txt", 'r') as f_in:
+this_dir, _ = os.path.split(__file__)
+dataset_path = os.path.join(this_dir, "dataset_1.txt")
+
+with open(dataset_path, 'r') as f_in:
     observation = f_in.readline()
     path = f_in.readline()
     while path != '':
@@ -15,5 +17,3 @@ with open("dataset_1.txt", 'r') as f_in:
         observation = f_in.readline()
         path = f_in.readline()
 
-
-print(len(Dataset))
