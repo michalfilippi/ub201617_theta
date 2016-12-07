@@ -1,0 +1,12 @@
+    bin  
+    name    Name of gene
+    chrom   Reference sequence chromosome or scaffold
+    strand  + or - for strand
+    txStart Transcription start position
+    txEnd   Transcription end position
+    cdsStart    Coding region start
+    cdsEnd  Coding region end
+    exonCount   Number of exons
+    exonStarts  Exon start positions
+    exonEnds    Exon end positions
+    proteinID   Swiss-Prot protein ID

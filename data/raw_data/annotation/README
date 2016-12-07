@@ -1,0 +1,6 @@
+These files represent known genes as well as exons and introns
+in the Saccharomyces Cerevisiae organism.
+
+The file
+    sacCer3.genes.filtered.txt
+contains only genes with at least 1 intron.
