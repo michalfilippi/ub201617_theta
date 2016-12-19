@@ -1,4 +1,4 @@
-from markov_models import HMM
+from lib.markov_models import HMM
 from data.dataset_1 import read_data
 import numpy as np
 

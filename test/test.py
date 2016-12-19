@@ -1,4 +1,4 @@
-from markov_models import HMM
+from lib.markov_models import HMM
 from data.dataset_1 import read_data
 
 
@@ -22,6 +22,5 @@ testing_percentage = 0.3
 test_data = Dataset[0:round(testing_percentage*len(Dataset))]
 learning_data = Dataset[len(test_data):len(Dataset)]
 hmm.supervised_learning(learning_data)
-print(hmm.supervised_testing(test_data))
-print(hmm.transition_matrix)
-print(hmm.emission_matrix)
+
+print(hmm.testing(test_data))
