@@ -129,7 +129,7 @@ class HMM:
 
         :param output: given output of HMM
         :param iterations: number of learning iterations
-        :return: None
+        :return: viterbi algorithm path
         """
 
         for _ in range(iterations):
@@ -157,6 +157,7 @@ class HMM:
                         new_em_matrix[st][c] = 1 / len(self.alphabet())
 
             counter_tr = collections.Counter(zip(path[:-1], path[1:]))
+
             for st_1 in self.states():
                 new_tr_matrix[st_1] = dict()
                 normalization_sum = 0
@@ -177,6 +178,86 @@ class HMM:
             # update matrices
             self.transition_matrix = new_tr_matrix
             self.emission_matrix = new_em_matrix
+            return path
+
+    def edit_distance(self, d1, d2):
+        n = len(d1)
+        table = [[j if i == 0 else 0 if j != 0 else i for i in range(n+1)] for j in range(n+1)]
+
+        for j in range(1, n+1):
+            for i in range(1, n+1):
+                table[i][j] = min(table[i-1][j]+1,
+                                  table[i][j-1]+1,
+                                  table[i-1][j-1] + (0 if d1[j-1] == d2[i-1] else 1))
+
+        return (table[n][n])/n
+
+    def distance(self, d1, d2):
+        n = len(d1)
+        sum = 0
+        for (symbol1, symbol2) in zip(d1, d2):
+            if symbol1 == symbol2:
+                sum += 1
+
+        return sum/n
+
+    def supervised_learning(self, input_data):
+
+        new_tr_matrix = dict()
+        for seq, given_path in input_data:
+            state_pairs = collections.Counter(zip(given_path[:-1], given_path[1:]))
+            state_occurs = collections.Counter(given_path)
+
+            for st_1, _ in state_occurs.items():
+                new_tr_matrix[st_1] = dict()
+                for st_2, _ in state_occurs.items():
+                    new_tr_matrix[st_1][st_2] = state_pairs[(st_1,st_2)]/state_occurs[st_1]
+
+        new_em_matrix = dict()
+        for seq, given_path in input_data:
+            em_pairs = collections.Counter(zip(given_path, seq))
+            letter_occurs = collections.Counter(seq)
+            state_occurs = collections.Counter(given_path)
+            #
+            for st, _ in state_occurs.items():
+                 new_em_matrix[st] = dict()
+                 for letter, _ in letter_occurs.items():
+                     new_em_matrix[st][letter] = em_pairs[(st,letter)]/state_occurs[st]
+
+        self.transition_matrix = new_tr_matrix
+        self.emission_matrix = new_em_matrix
+
+    def supervised_learning_beta(self, input_data):
+        """
+        Calculates matrices using viterbi learning,
+        which will be used for mapping nex examples
+
+        :param input_data: list of sequences (ATGCGATATG)
+        :param paths: results of viterbi algorith on each sequence
+        :param return: transision and emision matrices - parameters of HMM model
+        """
+
+        iterations = 1 # iterations of viterbi learning
+        for seq, given_ie in input_data:
+            # update emission and transition matrices
+            self.viterbi_learning(seq, iterations)
+
+
+    def testing(self, testing_data):
+        """
+        :param testing_data: data to test supervised learning
+        :return accuracy of our model
+        """
+        distances = []
+
+        for test_seq, test_path in testing_data:
+            viterbi_path = self.most_probable_path_given_output(test_seq)[0]
+            distances.append(self.distance(viterbi_path, test_path))
+
+        return sum(distances) / float(len(distances))
+
+
+
 
     def forward_filtering(self, output, normalize=True):
         """Calculates probability distributions for
