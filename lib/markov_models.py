@@ -219,15 +219,22 @@ class HMM:
                 new_tr_matrix[st_1][st_2] = state_pairs_c[(st_1, st_2)] / state_occurs_c[st_1]
 
         new_em_matrix = dict()
+        em_pairs = []
+        state_occurs = []
         for seq, given_path in input_data:
-            em_pairs = collections.Counter(zip(given_path, seq))
-            letter_occurs = collections.Counter(seq)
-            state_occurs = collections.Counter(given_path)
-            #
-            for st, _ in state_occurs.items():
-                 new_em_matrix[st] = dict()
-                 for letter, _ in letter_occurs.items():
-                     new_em_matrix[st][letter] = em_pairs[(st,letter)]/state_occurs[st]
+            em_pairs += zip(given_path, seq)
+            state_occurs += given_path
+
+        em_pairs_c = collections.Counter(em_pairs)
+        state_occurs_c = collections.Counter(state_occurs)
+
+        for st in self.emission_matrix.keys():
+             new_em_matrix[st] = dict()
+             for letter in self.emission_matrix[st].keys():
+                 if state_occurs_c[st] == 0:
+                     new_em_matrix[st][letter] = 0
+                 else:
+                    new_em_matrix[st][letter] = em_pairs_c[(st,letter)] / state_occurs_c[st]
 
         # update initial state distribution
         new_init_states = dict()
@@ -256,7 +263,7 @@ class HMM:
             self.viterbi_learning(seq, iterations)
 
 
-    def testing(self, testing_data, debug=True):
+    def testing(self, testing_data, debug=False):
         """
         :param testing_data: data to test supervised learning
         :return accuracy of our model
