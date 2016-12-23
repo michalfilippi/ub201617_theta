@@ -226,7 +226,7 @@ class HMM:
 
         # update initial state distribution
         new_init_states = dict()
-        init_states = [path[0] for path in input_data[1]]
+        init_states = [sample[1][0] for sample in input_data]
         state_occurs = collections.Counter(init_states)
         for state in self.init_state_dist.keys():
             new_init_states[state] = state_occurs[state] / len(init_states)
