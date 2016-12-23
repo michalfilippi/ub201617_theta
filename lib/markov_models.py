@@ -204,14 +204,19 @@ class HMM:
     def supervised_learning(self, input_data):
 
         new_tr_matrix = dict()
+        state_pairs = []
+        state_occurs = []
         for seq, given_path in input_data:
-            state_pairs = collections.Counter(zip(given_path[:-1], given_path[1:]))
-            state_occurs = collections.Counter(given_path)
+            state_pairs += zip(given_path[:-1], given_path[1:])
+            state_occurs += given_path[:-1]
 
-            for st_1, _ in state_occurs.items():
-                new_tr_matrix[st_1] = dict()
-                for st_2, _ in state_occurs.items():
-                    new_tr_matrix[st_1][st_2] = state_pairs[(st_1,st_2)]/state_occurs[st_1]
+        state_pairs_c = collections.Counter(state_pairs)
+        state_occurs_c = collections.Counter(state_occurs)
+
+        for st_1 in self.transition_matrix.keys():
+            new_tr_matrix[st_1] = dict()
+            for st_2 in self.transition_matrix.keys():
+                new_tr_matrix[st_1][st_2] = state_pairs_c[(st_1, st_2)] / state_occurs_c[st_1]
 
         new_em_matrix = dict()
         for seq, given_path in input_data:
@@ -251,18 +256,24 @@ class HMM:
             self.viterbi_learning(seq, iterations)
 
 
-    def testing(self, testing_data):
+    def testing(self, testing_data, debug=True):
         """
         :param testing_data: data to test supervised learning
         :return accuracy of our model
         """
         distances = []
+        pairs = []
 
         for test_seq, test_path in testing_data:
             viterbi_path = self.most_probable_path_given_output(test_seq)[0]
+            pairs.append((test_path, viterbi_path))
             distances.append(self.distance(viterbi_path, test_path))
 
-        return sum(distances) / float(len(distances))
+        if debug:
+            return sum(distances) / float(len(distances)), pairs
+
+        else:
+            return sum(distances) / float(len(distances))
 
 
 
