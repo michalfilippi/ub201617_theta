@@ -224,8 +224,16 @@ class HMM:
                  for letter, _ in letter_occurs.items():
                      new_em_matrix[st][letter] = em_pairs[(st,letter)]/state_occurs[st]
 
+        # update initial state distribution
+        new_init_states = dict()
+        init_states = [path[0] for path in input_data[1]]
+        state_occurs = collections.Counter(init_states)
+        for state in self.init_state_dist.keys():
+            new_init_states[state] = state_occurs[state] / len(init_states)
+
         self.transition_matrix = new_tr_matrix
         self.emission_matrix = new_em_matrix
+        self.init_state_dist = new_init_states
 
     def supervised_learning_beta(self, input_data):
         """
