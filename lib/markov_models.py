@@ -251,14 +251,26 @@ class HMM:
     def viterbi_learning_batch(self, input_data, iterations=1):
         """
 
-        :param input_data: list of sequences (ATGCGATATG)
-        :param paths: results of viterbi algorith on each sequence
-        :param return: transision and emision matrices - parameters of HMM model
+        :param input_data:
+        :param iterations:
+        :return:
         """
 
         for _ in range(iterations):
             for seq, _ in input_data:
                 path = self.viterbi_learning(seq, 1)
+
+    def baum_welch_learning_batch(self, input_data, iterations=1):
+        """
+
+        :param input_data:
+        :param iterations:
+        :return:
+        """
+
+        for _ in range(iterations):
+            for seq, _ in input_data:
+                path = self.baum_welch_learning(seq, 1)
 
     def test(self, testing_data, debug=False):
         """
