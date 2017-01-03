@@ -293,6 +293,31 @@ class HMM:
 
 
 
+    def test_weighted(self, testing_data, debug=False):
+        """
+        :param testing_data: data to test supervised learning
+        :return accuracy of our model
+        """
+
+        pairs = []
+        errors = 0
+        total = 0
+
+        for test_seq, test_path in testing_data:
+            viterbi_path = self.most_probable_path_given_output(test_seq)[0]
+            pairs.append((test_path, viterbi_path))
+
+            total += len(viterbi_path)
+            for c1, c2 in zip(viterbi_path, test_path):
+                if c1 != c2:
+                    errors += 1
+
+        if debug:
+            return 1 - errors / total, pairs
+
+        else:
+            return 1 - errors / total
+
 
     def forward_filtering(self, output, normalize=True):
         """Calculates probability distributions for
