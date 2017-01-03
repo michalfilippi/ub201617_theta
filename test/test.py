@@ -23,4 +23,4 @@ test_data = Dataset[0:round(testing_percentage*len(Dataset))]
 learning_data = Dataset[len(test_data):len(Dataset)]
 hmm.supervised_learning(learning_data)
 
-print(hmm.testing(test_data))
+print(hmm.test(test_data))

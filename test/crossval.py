@@ -13,13 +13,13 @@ testing_percentage = 0.3
 test_data = Dataset[0:round(testing_percentage*len(Dataset))]
 learning_data = Dataset[len(test_data):len(Dataset)]
 hmm.supervised_learning(learning_data)
-print(hmm.testing(test_data))
+print(hmm.test(test_data))
 
 # crossvalidation
 accuracies = []
 for  k, example in enumerate(Dataset):
     hmm.supervised_learning(Dataset[:k] + Dataset[(k + 1):])
-    accuracies.append(hmm.testing([example]))
+    accuracies.append(hmm.test([example]))
 
 print(accuracies)
 print (np.mean(accuracies))
