@@ -53,9 +53,9 @@ class HMM:
         :return: probability of given output
         """
 
-        prob = 1
+        prob = Decimal(1)
         for o, s in zip(output, path):
-            prob *= self.emission_matrix[s][o]
+            prob *= Decimal(self.emission_matrix[s][o])
 
         return prob
 
@@ -248,23 +248,19 @@ class HMM:
         self.emission_matrix = new_em_matrix
         self.init_state_dist = new_init_states
 
-    def supervised_learning_beta(self, input_data):
+    def viterbi_learning_batch(self, input_data, iterations=1):
         """
-        Calculates matrices using viterbi learning,
-        which will be used for mapping nex examples
 
         :param input_data: list of sequences (ATGCGATATG)
         :param paths: results of viterbi algorith on each sequence
         :param return: transision and emision matrices - parameters of HMM model
         """
 
-        iterations = 1 # iterations of viterbi learning
-        for seq, given_ie in input_data:
-            # update emission and transition matrices
-            self.viterbi_learning(seq, iterations)
+        for _ in range(iterations):
+            for seq, _ in input_data:
+                path = self.viterbi_learning(seq, 1)
 
-
-    def testing(self, testing_data, debug=False):
+    def test(self, testing_data, debug=False):
         """
         :param testing_data: data to test supervised learning
         :return accuracy of our model
