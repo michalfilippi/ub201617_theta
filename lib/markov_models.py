@@ -1,6 +1,7 @@
 import collections
 import itertools
 from decimal import Decimal
+import random
 
 
 class HMM:
@@ -448,6 +449,42 @@ class HMM:
 
         f_filtering = self.forward_filtering(output, False)
         return sum([f_filtering[(len(output) - 1, s)] for s in self.states()])
+
+    @staticmethod
+    def init_matrices_randomly(states, emissions):
+        """Initialize randomly transmission and emission matrices.
+
+        :param states: list of states of hmm
+        :param emissions: list of emissions of hmm
+        :return: tuple (t, e) where t is new random transition matrix and e
+        emission matrix
+        """
+
+        transition_matrix = dict()
+        emission_matrix = dict()
+
+        # init transition_matrix
+        for s_1 in states:
+            transition_matrix[s_1] = dict()
+            normalization_sum = 0
+            for s_2 in states:
+                transition_matrix[s_1][s_2] = random.random()
+                normalization_sum += transition_matrix[s_1][s_2]
+            for s_2 in states:
+                transition_matrix[s_1][s_2] /= normalization_sum
+
+        # init emission_matrix
+        for s_1 in states:
+            emission_matrix[s_1] = dict()
+            normalization_sum = 0
+            for e in emissions:
+                emission_matrix[s_1][e] = random.random()
+                normalization_sum += emission_matrix[s_1][e]
+            for e in emissions:
+                emission_matrix[s_1][e] /= normalization_sum
+
+        return (transition_matrix, emission_matrix)
+
 
     def __str__(self):
         """Converts HMM into string using the same notation as HMM problems on
