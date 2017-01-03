@@ -527,6 +527,14 @@ class HMM:
         """
 
         output = []
+        output.append("-------- init state dist\n")
+        for state in sorted(self.states()):
+            output.append(state)
+            output.append("\t")
+            output.append(str(round(self.init_state_dist[state], 3)))
+            output.append("\n")
+        output.append("-------- transmission dist\n")
+        output.append('\t')
         for state in sorted(self.states()):
             output.append(state)
             output.append("\t")
@@ -539,7 +547,7 @@ class HMM:
                 output.append(str(prob))
                 output.append("\t")
             output.append("\n")
-        output.append("--------\n")
+        output.append("-------- emission dist\n")
         for c in sorted(self.alphabet()):
             output.append('\t')
             output.append(c)
