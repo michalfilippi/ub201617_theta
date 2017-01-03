@@ -1,5 +1,6 @@
 import collections
 import itertools
+from decimal import Decimal
 
 
 class HMM:
@@ -73,7 +74,7 @@ class HMM:
 
         for state in states:
             emiss_prob = self.emission_matrix[state][output[0]]
-            probs[(state, 0)] = self.init_state_dist[state] * emiss_prob
+            probs[(state, 0)] = Decimal(self.init_state_dist[state] * emiss_prob)
 
         for i, o in enumerate(output):
             if i == 0:
@@ -84,7 +85,7 @@ class HMM:
                 predecessors = []
                 for prev_state in states:
                     trans_prob = self.transition_matrix[prev_state][state]
-                    prob = probs[(prev_state, i - 1)] * trans_prob * emiss_prob
+                    prob = probs[(prev_state, i - 1)] * Decimal(trans_prob * emiss_prob)
                     predecessors.append((prob, (prev_state, i - 1)))
                 best_predecessor = max(predecessors)
 
@@ -212,7 +213,6 @@ class HMM:
 
         state_pairs_c = collections.Counter(state_pairs)
         state_occurs_c = collections.Counter(state_occurs)
-
         for st_1 in self.transition_matrix.keys():
             new_tr_matrix[st_1] = dict()
             for st_2 in self.transition_matrix.keys():
