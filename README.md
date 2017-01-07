@@ -89,7 +89,7 @@ print('i', probs[2], probs[3], sep='\t')
 #### Results of unsupervised learning
 We performed Viterbi learning on every training example to get the new emission and transition matrices which we will test on other examples. Test has shown that with this method we can obtain unweighted accuracy of 59.132641678556666% and weighted accuracy of 61.08856351083075%.
 ```sh
-hmm.viterbi_learning_batch(dataset, iterations=50)
+hmm.viterbi_learning_batch(dataset, iterations=5)
 print("Unweighted accuracy:", hmm.test(dataset) * 100, '[%]')
 print("Weighted accuracy:", hmm.test_weighted(dataset) * 100, '[%]')
 print()
