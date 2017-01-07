@@ -69,6 +69,7 @@ print("Weighted accuracy:", sum(accuracies_weighted) / normalization_sum * 100, 
 ```
 Here we have a plot of gene length and accuracy dependency:
 ![](http://i.imgur.com/5RS0QP4.png)
+
 And confusion matrix is:
 ```sh
 c = collections.Counter(pred_pairs)
@@ -86,7 +87,7 @@ print('i', probs[2], probs[3], sep='\t')
 | e   | 94.98%	 |5.02% |
 | i      | 58.4%      |  41.6% |
 #### Results of unsupervised learning
-We performed Viterbi learning on every training example to get the new emission and transition matrices which we will test on other examples. Test has shown that with this method we can obtain unweighted accuracy of 75.31841302411345% and weighted accuracy of 81.04262512788894%.
+We performed Viterbi learning on every training example to get the new emission and transition matrices which we will test on other examples. Test has shown that with this method we can obtain unweighted accuracy of 59.132641678556666% and weighted accuracy of 61.08856351083075%.
 ```sh
 hmm.viterbi_learning_batch(dataset, iterations=50)
 print("Unweighted accuracy:", hmm.test(dataset) * 100, '[%]')
