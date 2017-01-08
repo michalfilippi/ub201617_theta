@@ -1,6 +1,6 @@
 # Project B2
 
-This project is for Introduction to Bioinformatics course at FRI University of Ljubljana 2016/17.  Aim of the project is to perform prediction on a test set of genes and provide an evaluation using supervised learning and unsupervised learning.
+This project is for Introduction to Bioinformatics course at FRI University of Ljubljana 2016/17.  Aim of the project is to perform prediction of intron/exon regions on a test set of genes and provide an evaluation using supervised learning and unsupervised learning.
 We defined an HMM model with two hidden states and observed characters which was further used to implement learning. The transition that we used was between exons (segments that end up in the protein) and introns (segments that are "spliced-out") on a given set of eukaryotic genes (we will do this in yeast - Saccharomyces Cerevisiae, which is maybe the simplest eukaryotic organism).
 
 ### Data
@@ -102,6 +102,29 @@ hmm = HMM(t, e)
 hmm.supervised_learning(dataset)
 print(hmm)
 ```
+And the output is:
+
+Initial state distribution:
+
+|   |  |  
+| :------------ |
+| e   | 1.0|
+| i      | 0.0|    
+
+Transmission matrix:
+
+|   | e | i |
+| :------------ |:---------------:| -----:|
+| e   |0.999 |0.001|
+| i      | 0.003   |  0.997 |
+
+Emission matrix:
+
+|   | A | C | G | T |
+| :------------ |:---------------:| -----:|
+| e   | 0.33 |0.199| 0.183| 0.288|
+| i      | 0.359 |  0.141|0.16 |0.339 |
+
 From this we can conclude that:
 - every gene starts with exon, 
 - introns are three times shorter than exons,
